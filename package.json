@@ -1,0 +1,26 @@
+{
+  "name": "converter",
+  "version": "1.0.0",
+  "description": "dxf converter for course work. Convert polyline using LAR vectors.",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src/*",
+    "build": "npm run lint && webpack --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gtt142/DXF-converter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gtt142/DXF-converter/issues"
+  },
+  "homepage": "https://github.com/gtt142/DXF-converter#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}

@@ -1,4 +1,4 @@
-let allLayers = [];
+const allLayers = [];
 
 class IdHolder {
     constructor() {
@@ -91,10 +91,14 @@ function addLayer() {
     allLayers.push(layer);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    let addLayerBtn = document.getElementById("add_layer")
-    addLayerBtn.addEventListener("click", () => {
+function setListener() {
+    // document.addEventListener('DOMContentLoaded', () => {
+    let addLayerBtn = document.getElementById('add_layer');
+    addLayerBtn.addEventListener('click', () => {
         addLayer();
     });
-    
-});
+        
+    // });
+}
+
+export {setListener, allLayers};

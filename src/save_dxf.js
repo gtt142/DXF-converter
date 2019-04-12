@@ -1,3 +1,6 @@
+import Dxf from './dxf';
+import {allLayers, setListener as addLayerListener} from './input';
+
 // let L = [24, 0, 48, 0, 24];
 // let R = [0, 6, 0, 6, 0];
 // let A = [0, 90, 0, 90, 0];
@@ -7,7 +10,6 @@
 let W = 5;
 const _LINE = 'LINE';
 const _ARC = 'ARC';
-let VPORT_HEIGHT = 200;
 
 /**
  * Primitive class for LINE or ARC
@@ -16,7 +18,7 @@ class Primitive {
     constructor(values, type=_LINE) {
         switch (type.toUpperCase()) {
             case _LINE:
-                this.type = _LINE
+                this.type = _LINE;
                 this.x1 = values.x1;
                 this.y1 = values.y1;
                 this.z1 = values.z1;
@@ -25,7 +27,7 @@ class Primitive {
                 this.z2 = values.z2;
                 break;
             case _ARC:
-                this.type = _ARC
+                this.type = _ARC;
                 this.x = values.x;
                 this.y = values.y;
                 this.z = values.z;
@@ -41,125 +43,6 @@ class Primitive {
 }
 
 /**
- * Header strings for DXF file.
- * @type {string[]}
- */
-const dxfHeader = [
-    '0',
-    'SECTION',
-    '2',
-    'HEADER',
-    '9',
-    '$ACADVER',
-    '1',
-    'AC1006',
-    '9',
-    '$INSUNITS',
-    '70',
-    '4',
-    '9',
-    '$AUNITS',
-    '70',
-    '0',
-    '9',
-    '$AUPREC',
-    '70',
-    '2',
-    '0',
-    'ENDSEC',
-    '0',
-    'SECTION',
-    '2',
-    'TABLES',
-    '0',
-    'TABLE',
-    '2',
-    'VPORT',
-    '70',
-    '1',
-    '0',
-    'VPORT',
-    '2',
-    '*ACTIVE',
-    '70',
-    '0',
-    '10',
-    '0.0',
-    '20',
-    '0.0',
-    '11',
-    '1.0',
-    '21',
-    '1.0',
-    '12',
-    '0.0',
-    '22',
-    '0.0',
-    '13',
-    '0.0',
-    '23',
-    '0.0',
-    '14',
-    '10.0',
-    '24',
-    '10.0',
-    '15',
-    '5.0',
-    '25',
-    '5.0',
-    '16',
-    '0.0',
-    '26',
-    '0.0',
-    '36',
-    '1.0',
-    '17',
-    '0.0',
-    '27',
-    '0.0',
-    '37',
-    '0.0',
-    '40',
-    VPORT_HEIGHT,
-    '41',
-    '1.0',
-    '42',
-    '50.0',
-    '43',
-    '0.0',
-    '44',
-    '0.0',
-    '50',
-    '0.0',
-    '51',
-    '0.0',
-    '71',
-    '0',
-    '72',
-    '1000',
-    '73',
-    '1',
-    '74',
-    '3',
-    '75',
-    '0',
-    '76',
-    '1',
-    '77',
-    '0',
-    '78',
-    '0',
-    '0',
-    'ENDTAB',
-    '0',
-    'ENDSEC',
-    '0',
-    'SECTION',
-    '2',
-    'ENTITIES'
-];
-
-/**
  * DxfCoverter class
  */
 class DxfConverter { 
@@ -168,17 +51,12 @@ class DxfConverter {
      * Create a converter
      */
     constructor() {
-        this.file = '';
-        this.prepare = this.prepare.bind(this);
+        this._dxfFile = new Dxf();
+        // this.file = '';
+        // this.prepare = this.prepare.bind(this);
         this.convert = this.convert.bind(this);
         this.writeBody = this.writeBody.bind(this);
         this.finishWriting = this.finishWriting.bind(this);
-        this.writeDxfHeader = this.writeDxfHeader.bind(this);
-        this.writeDxfEnd = this.writeDxfEnd.bind(this);
-        this.writeDxfPoint = this.writeDxfPoint.bind(this);
-        this.writeDxfLine = this.writeDxfLine.bind(this);
-        this.writeDxfArc = this.writeDxfArc.bind(this);
-        this.writeDxfCircle = this.writeDxfCircle.bind(this);
     }
 
     /**
@@ -324,7 +202,7 @@ class DxfConverter {
                 x2: curentRightX,
                 y2: curentRightY,
                 z2: zCoord
-            }
+            };
             this.primitives[midElement] = new Primitive(coordinates, _LINE);
         } else { //  it's ARC
             let leftAnglePart = irpx - Math.floor(irpx);
@@ -364,7 +242,7 @@ class DxfConverter {
                 R: R[midElement],
                 fi1: startAngle,
                 fi2: endAngle
-            }
+            };
             this.primitives[midElement] = new Primitive(coordinates, _ARC);
         }
 
@@ -385,7 +263,7 @@ class DxfConverter {
                     x2: curentLeftX,
                     y2: curentLeftY,
                     z2: zCoord
-                }
+                };
                 this.primitives[curentElement] = new Primitive(coordinates, _LINE);
                 curentLeftX = newLeftX;
                 curentLeftY = newLeftY;
@@ -411,7 +289,7 @@ class DxfConverter {
                     R: R[curentElement],
                     fi1: startAngle,
                     fi2: endAngle
-                }
+                };
                 this.primitives[curentElement] = new Primitive(coordinates, _ARC);
             }
 
@@ -435,7 +313,7 @@ class DxfConverter {
                     x2: newRightX,
                     y2: newRightY,
                     z2: zCoord
-                }
+                };
                 this.primitives[curentElement] = new Primitive(coordinates, _LINE);
                 curentRightX = newRightX;
                 curentRightY = newRightY;
@@ -462,7 +340,7 @@ class DxfConverter {
                     R: R[curentElement],
                     fi1: startAngle,
                     fi2: endAngle
-                }
+                };
                 this.primitives[curentElement] = new Primitive(coordinates, _ARC);
             }
 
@@ -481,11 +359,11 @@ class DxfConverter {
             if (el != null) {
                 switch (el.type.toUpperCase()) {
                     case _LINE:
-                        this.writeDxfLine(el.x1, el.y1, el.z1, el.x2, el.y2, el.z2, layerName);
+                        this._dxfFile.addDxfLine(el.x1, el.y1, el.z1, el.x2, el.y2, el.z2, layerName);
                         break;
                     case _ARC:
                         if (el.fi2 - el.fi1 != 0)
-                            this.writeDxfArc(el.x, el.y, el.z, el.R, el.fi1, el.fi2, layerName);
+                            this._dxfFile.addDxfArc(el.x, el.y, el.z, el.R, el.fi1, el.fi2, layerName);
                         break;
                     default:
                         break;
@@ -494,14 +372,13 @@ class DxfConverter {
         }
     }
 
-    prepare() {
-        this.file = '';
-        this.writeDxfHeader();        
-    }
+    // prepare() {
+    //     this.file = '';
+    //     this.writeDxfHeader();        
+    // }
     
     finishWriting() {
-        this.writeDxfEnd();
-        return this.file;
+        return this._dxfFile.body;
     }
 
     yCoordinateMoveToIRPY(irpy, count) {
@@ -543,7 +420,7 @@ class DxfConverter {
         let centerX = localCSCenter.x + x;
         let centerY = localCSCenter.y + y;
 
-        return {x: centerX, y:centerY}
+        return {x: centerX, y:centerY};
     }
 
     arcCenterByCounterClockwiseTangent (x, y, R, tangentAngle) {
@@ -553,7 +430,7 @@ class DxfConverter {
         let centerX = localCSCenter.x + x;
         let centerY = localCSCenter.y + y;
 
-        return {x: centerX, y:centerY}
+        return {x: centerX, y:centerY};
     }
 
     /**
@@ -567,96 +444,6 @@ class DxfConverter {
         return {x: x_, y: y_};
     }
 
-    writeDxfHeader() {
-        for (let str of dxfHeader) {
-            this.file += str + '\n';
-        }
-    }
-
-    writeDxfEnd() {
-        this.file += '0\n';
-        this.file += 'ENDSEC\n';
-        this.file += '0\n';
-        this.file += 'EOF\n';
-    }
-
-    writeDxfPoint(x, y, z, layer='DefLayer') {
-        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
-            throw new Error("Wrong data format")
-        }
-        this.file += '0\n';
-        this.file += 'POINT\n';
-        this.file += '8\n';
-        this.file += layer + '\n';
-        this.file += '10\n';
-        this.file += x + '\n';
-        this.file += '20\n';
-        this.file += y + '\n';
-        this.file += '30\n';
-        this.file += z + '\n';
-    }
-
-    writeDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
-        if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
-            throw new Error("Wrong data format")
-        }
-        this.file += '0\n';
-        this.file += 'LINE\n';
-        this.file += '8\n';
-        this.file += layer + '\n';
-        this.file += '10\n';
-        this.file += x1 + '\n';
-        this.file += '20\n';
-        this.file += y1 + '\n';
-        this.file += '30\n';
-        this.file += z1 + '\n';
-        this.file += '11\n';
-        this.file += x2 + '\n';
-        this.file += '21\n';
-        this.file += y2 + '\n';
-        this.file += '31\n';
-        this.file += z2 + '\n';
-    }
-
-    writeDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
-        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
-            throw new Error("Wrong data format")
-        }
-        this.file += '0\n';
-        this.file += 'ARC\n';
-        this.file += '8\n';
-        this.file += layer + '\n';
-        this.file += '10\n';
-        this.file += x + '\n';
-        this.file += '20\n';
-        this.file += y + '\n';
-        this.file += '30\n';
-        this.file += z + '\n';
-        this.file += '40\n';
-        this.file += R + '\n';
-        this.file += '50\n';
-        this.file += fi_start + '\n';
-        this.file += '51\n';
-        this.file += fi_end + '\n';
-    }
-
-    writeDxfCircle(x, y, z, R, layer='DefLayer') {
-        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
-            throw new Error("Wrong data format")
-        }
-        this.file += '0\n';
-        this.file += 'CIRCLE\n';
-        this.file += '8\n';
-        this.file += layer + '\n';
-        this.file += '10\n';
-        this.file += x + '\n';
-        this.file += '20\n';
-        this.file += y + '\n';
-        this.file += '30\n';
-        this.file += z + '\n';
-        this.file += '40\n';
-        this.file += R + '\n';
-    }
 }
 
 class FileSaver {
@@ -673,23 +460,24 @@ class FileSaver {
         } catch (e) {
             var evt = document.createEvent('MouseEvents');
             evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80,
-                                20, false, false, false, false, 0, null);
+                20, false, false, false, false, 0, null);
             node.dispatchEvent(evt);
         }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    let saveDxfButton = document.getElementById("save_dxf")
-    saveDxfButton.addEventListener("click", () => {
+    addLayerListener();
+    let saveDxfButton = document.getElementById('save_dxf');
+    saveDxfButton.addEventListener('click', () => {
 
         if (allLayers.length == 0) {
-            alert("Nothing to save");
+            alert('Nothing to save');
             return;
         }
 
         const conv = new DxfConverter();
-        conv.prepare();
+        // conv.prepare();
         
         let zCoord = 0.0;
         for (let i = 0; i < allLayers.length; i++) {
