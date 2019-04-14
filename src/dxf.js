@@ -128,6 +128,96 @@ export default class Dxf {
         entity += R + '\n';
         this._entities.push(entity);
     }
+
+    static getDxfPoint(x, y, z, layer='DefLayer') {
+        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
+            throw new Error('Wrong data format');
+        }
+        let entity = '';
+        entity += '0\n';
+        entity += 'POINT\n';
+        entity += '8\n';
+        entity += layer + '\n';
+        entity += '10\n';
+        entity += x + '\n';
+        entity += '20\n';
+        entity += y + '\n';
+        entity += '30\n';
+        entity += z + '\n';
+        return entity;
+    }
+
+    addDxfEntity(entity) {
+        this._entities.push(entity);
+    }
+
+    static getDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
+        if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
+            throw new Error('Wrong data format');
+        }
+        let entity = '';
+        entity += '0\n';
+        entity += 'LINE\n';
+        entity += '8\n';
+        entity += layer + '\n';
+        entity += '10\n';
+        entity += x1 + '\n';
+        entity += '20\n';
+        entity += y1 + '\n';
+        entity += '30\n';
+        entity += z1 + '\n';
+        entity += '11\n';
+        entity += x2 + '\n';
+        entity += '21\n';
+        entity += y2 + '\n';
+        entity += '31\n';
+        entity += z2 + '\n';
+        return entity;
+    }
+
+    static getDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
+        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
+            throw new Error('Wrong data format');
+        }
+        let entity = '';
+        entity += '0\n';
+        entity += 'ARC\n';
+        entity += '8\n';
+        entity += layer + '\n';
+        entity += '10\n';
+        entity += x + '\n';
+        entity += '20\n';
+        entity += y + '\n';
+        entity += '30\n';
+        entity += z + '\n';
+        entity += '40\n';
+        entity += R + '\n';
+        entity += '50\n';
+        entity += fi_start + '\n';
+        entity += '51\n';
+        entity += fi_end + '\n';
+        return entity;
+    }
+
+    static getDxfCircle(x, y, z, R, layer='DefLayer') {
+        if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
+            throw new Error('Wrong data format');
+        }
+        let entity = '';
+        entity += '0\n';
+        entity += 'CIRCLE\n';
+        entity += '8\n';
+        entity += layer + '\n';
+        entity += '10\n';
+        entity += x + '\n';
+        entity += '20\n';
+        entity += y + '\n';
+        entity += '30\n';
+        entity += z + '\n';
+        entity += '40\n';
+        entity += R + '\n';
+        return entity;
+    }
 }
 
 /**

@@ -1,12 +1,7 @@
 import Dxf from './dxf';
+import FileSaver from './file_saver';
 import {allLayers, setListener as addLayerListener} from './input';
 
-// let L = [24, 0, 48, 0, 24];
-// let R = [0, 6, 0, 6, 0];
-// let A = [0, 90, 0, 90, 0];
-// let irpx = 2.5;
-// let irpy = 2.5;
-// let irpB = 2.5;
 let W = 5;
 const _LINE = 'LINE';
 const _ARC = 'ARC';
@@ -52,8 +47,6 @@ class DxfConverter {
      */
     constructor() {
         this._dxfFile = new Dxf();
-        // this.file = '';
-        // this.prepare = this.prepare.bind(this);
         this.convert = this.convert.bind(this);
         this.writeBody = this.writeBody.bind(this);
         this.finishWriting = this.finishWriting.bind(this);
@@ -371,11 +364,6 @@ class DxfConverter {
             }
         }
     }
-
-    // prepare() {
-    //     this.file = '';
-    //     this.writeDxfHeader();        
-    // }
     
     finishWriting() {
         return this._dxfFile.body;
@@ -446,26 +434,6 @@ class DxfConverter {
 
 }
 
-class FileSaver {
-    static saveTextToFile(content, fileName, type = 'data:text/plain;charset=utf-8,') {
-        let a = document.createElement('a');
-        a.download = fileName;
-        a.href = type + content;
-        FileSaver.click(a);
-    }
-
-    static click(node) {
-        try {
-            node.dispatchEvent(new MouseEvent('click'));
-        } catch (e) {
-            var evt = document.createEvent('MouseEvents');
-            evt.initMouseEvent('click', true, true, window, 0, 0, 0, 80,
-                20, false, false, false, false, 0, null);
-            node.dispatchEvent(evt);
-        }
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     addLayerListener();
     let saveDxfButton = document.getElementById('save_dxf');
@@ -477,7 +445,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const conv = new DxfConverter();
-        // conv.prepare();
         
         let zCoord = 0.0;
         for (let i = 0; i < allLayers.length; i++) {
