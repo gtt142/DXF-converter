@@ -1,5 +1,5 @@
 import Dxf from './dxf';
-import FileSaver from './file_saver';
+import FileSaver from './file-saver';
 import {allLayers, setListener as addLayerListener} from './input';
 
 let W = 5;
@@ -37,14 +37,7 @@ class Primitive {
     }
 }
 
-/**
- * DxfCoverter class
- */
 class DxfConverter { 
-
-    /**
-     * Create a converter
-     */
     constructor() {
         this._dxfFile = new Dxf();
         this.convert = this.convert.bind(this);

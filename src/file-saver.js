@@ -1,10 +1,13 @@
 /**
- * FileSaver save data to file
- * @param {String} data - data for save
- * @param {String} filename - name of file to save
- * @param {String} contentType - name of file to save
+ * `FileSaver` save data to file as downloading
  */
 export default class FileSaver {
+    /**
+     * Save data to text file
+     * @param {String} data - data for save
+     * @param {String} fileName - name of file to save
+     * @param {String} contentType - name of file to save
+     */
     static saveTextToFile(data, fileName, contentType = 'data:text/plain;charset=utf-8,') {
         let a = document.createElement('a');
         a.download = fileName;

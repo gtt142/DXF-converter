@@ -1,13 +1,10 @@
 const VPORT_HEIGHT = 200;
 
 /**
- * Dxf file class
+ * Dxf file class.
+ * version of dxf - AC1009 (R12/LT2 DXF)
  */
 export default class Dxf { 
-
-    /**
-     * Create a converter
-     */
     constructor() {
         this._header;
         this._end;
@@ -18,6 +15,10 @@ export default class Dxf {
         this.addDxfCircle = this.addDxfCircle.bind(this);
     }
 
+    /**
+     * Get dxf file as string
+     * @returns {String} file body
+     */
     get body() {
         let result;
         result = this.getDxfHeader();
@@ -26,6 +27,10 @@ export default class Dxf {
         return result;
     }
 
+    /**
+     * Return dxf header block string
+     * @private
+     */
     getDxfHeader() {
         let header = '';
         for (let str of dxfHeader) {
@@ -34,6 +39,10 @@ export default class Dxf {
         return header;
     }
 
+    /**
+     * Return dxf end block string
+     * @private
+     */
     getDxfEnd() {
         let str = '';
         str += '0\n';
@@ -43,6 +52,14 @@ export default class Dxf {
         return str;
     }
 
+    /**
+     * Add POINT to entities section in dxf
+     * 
+     * @param {Number} x coordinate `x`
+     * @param {Number} y coordinate `y`
+     * @param {Number} z coordinate `z`
+     * @param {String} layer the name of the layer to place the object
+     */
     addDxfPoint(x, y, z, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
             throw new Error('Wrong data format');
@@ -61,6 +78,17 @@ export default class Dxf {
         this._entities.push(entity);
     }
 
+    /**
+     * Add LINE to entities section in dxf
+     * 
+     * @param {Number} x1 coordinate `x` of first point
+     * @param {Number} y1 coordinate `y` of first point
+     * @param {Number} z1 coordinate `z` of first point
+     * @param {Number} x2 coordinate `x` of second point
+     * @param {Number} y2 coordinate `y` of second point
+     * @param {Number} z2 coordinate `z` of second point
+     * @param {String} layer the name of the layer to place the object
+     */
     addDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
         if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
             throw new Error('Wrong data format');
@@ -85,6 +113,17 @@ export default class Dxf {
         this._entities.push(entity);
     }
 
+    /**
+     * Add ARC to entities section in dxf
+     * 
+     * @param {Number} x coordinate `x` of center of the arc
+     * @param {Number} y coordinate `y` of center of the arc
+     * @param {Number} z coordinate `z` of center of the arc
+     * @param {Number} R radius of the arc
+     * @param {Number} fi_start start angle of the arc
+     * @param {Number} fi_end end angle of the arc
+     * @param {String} layer the name of the layer to place the object
+     */
     addDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
             throw new Error('Wrong data format');
@@ -109,6 +148,15 @@ export default class Dxf {
         this._entities.push(entity);
     }
 
+    /**
+     * Add CIRCLE to entities section in dxf
+     * 
+     * @param {Number} x coordinate `x` of center of the circle
+     * @param {Number} y coordinate `y` of center of the circle
+     * @param {Number} z coordinate `z` of center of the circle
+     * @param {Number} R radius of the circle
+     * @param {String} layer the name of the layer to place the object
+     */
     addDxfCircle(x, y, z, R, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
             throw new Error('Wrong data format');
@@ -129,6 +177,23 @@ export default class Dxf {
         this._entities.push(entity);
     }
 
+    /**
+     * Add entity to entities section of dxf
+     * @param {String} entity entity as string in dxf format
+     */
+    addDxfEntity(entity) {
+        this._entities.push(entity);
+    }
+
+    /**
+     * Get POINT as dxf entity section string
+     * 
+     * @param {Number} x coordinate `x`
+     * @param {Number} y coordinate `y`
+     * @param {Number} z coordinate `z`
+     * @param {String} layer the name of the layer to place the object
+     * @returns {String} entity as dxf string
+     */
     static getDxfPoint(x, y, z, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
             throw new Error('Wrong data format');
@@ -147,10 +212,18 @@ export default class Dxf {
         return entity;
     }
 
-    addDxfEntity(entity) {
-        this._entities.push(entity);
-    }
-
+    /**
+     * Get LINE as dxf entity section string
+     * 
+     * @param {Number} x1 coordinate `x` of first point
+     * @param {Number} y1 coordinate `y` of first point
+     * @param {Number} z1 coordinate `z` of first point
+     * @param {Number} x2 coordinate `x` of second point
+     * @param {Number} y2 coordinate `y` of second point
+     * @param {Number} z2 coordinate `z` of second point
+     * @param {String} layer the name of the layer to place the object
+     * @returns {String} entity as dxf string
+     */
     static getDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
         if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
             throw new Error('Wrong data format');
@@ -175,6 +248,18 @@ export default class Dxf {
         return entity;
     }
 
+    /**
+     * Get ARC as dxf entity section string
+     * 
+     * @param {Number} x coordinate `x` of center of the arc
+     * @param {Number} y coordinate `y` of center of the arc
+     * @param {Number} z coordinate `z` of center of the arc
+     * @param {Number} R radius of the arc
+     * @param {Number} fi_start start angle of the arc
+     * @param {Number} fi_end end angle of the arc
+     * @param {String} layer the name of the layer to place the object
+     * @returns {String} entity as dxf string
+     */
     static getDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
             throw new Error('Wrong data format');
@@ -199,6 +284,16 @@ export default class Dxf {
         return entity;
     }
 
+    /**
+     * Get CIRCLE as dxf entity section string
+     * 
+     * @param {Number} x coordinate `x` of center of the circle
+     * @param {Number} y coordinate `y` of center of the circle
+     * @param {Number} z coordinate `z` of center of the circle
+     * @param {Number} R radius of the circle
+     * @param {String} layer the name of the layer to place the object
+     * @returns {String} entity as dxf string
+     */
     static getDxfCircle(x, y, z, R, layer='DefLayer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
             throw new Error('Wrong data format');
@@ -220,7 +315,7 @@ export default class Dxf {
     }
 }
 
-/**
+/*
  * Header strings for DXF file.
  * @type {string[]}
  */
@@ -232,7 +327,7 @@ const dxfHeader = [
     '9',
     '$ACADVER',
     '1',
-    'AC1006',
+    'AC1009',
     '9',
     '$INSUNITS',
     '70',
