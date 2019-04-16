@@ -4,10 +4,10 @@ import DxfConverter from './dxf-converter';
 import {allLayers, setListener as addLayerListener} from './input';
 
 const W = 5; // zDelta
-const elementsOfCurveCount = 9;
+const defElementsOfCurveCount = 9;
 
 document.addEventListener('DOMContentLoaded', () => {
-    addLayerListener(elementsOfCurveCount);
+    addLayerListener(defElementsOfCurveCount);
     let saveDxfButton = document.getElementById('save_dxf');
     saveDxfButton.addEventListener('click', () => {
 
@@ -20,22 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let zCoord = 0.0;
         for (let i = 0; i < allLayers.length; i++) {
             let val;
-            val = allLayers[i].X.value;
+            val = Number(allLayers[i].X.value);
             if (isNaN(val)) {
                 throw new Error('IRPX is not valid');
             }
             let X = val;
-            val = allLayers[i].Y.value;
+            val = Number(allLayers[i].Y.value);
             if (isNaN(val)) {
                 throw new Error('IRPY is not valid');
             }
             let Y= val;
-            val = allLayers[i].Alpha.value;
+            val = Number(allLayers[i].Alpha.value);
             if (isNaN(val)) {
                 throw new Error('IRPB is not valid');
             }
             let Alpha = val;
-            val = allLayers[i].SP.value;
+            val = Number(allLayers[i].SP.value);
             if (isNaN(val)) {
                 throw new Error('IRPB is not valid');
             }
@@ -43,6 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
             let L = new Array(5);
             let A = new Array(5);
             let R = new Array(5);
+
+            let countInput = document.getElementById('count');
+            let elementsOfCurveCount = Number(countInput.value);
+            if (isNaN(elementsOfCurveCount)) {
+                elementsOfCurveCount = defElementsOfCurveCount;
+            }
 
             for (let j = 0; j < elementsOfCurveCount; j++) {
                 val = Number(allLayers[i].columnL.values[j].value);

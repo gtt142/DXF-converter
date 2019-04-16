@@ -113,13 +113,13 @@ export default class DxfConverter {
 
             let localCurentLeftX = curentLeftX - centerCoordinates.x;
             let localCurentLeftY = curentLeftY - centerCoordinates.y;
-            let newLocalLeftCoords = this._rotateLine(localCurentLeftX, localCurentLeftY, -1 * leftAngle);
+            let newLocalLeftCoords = this._rotateVector(localCurentLeftX, localCurentLeftY, -1 * leftAngle);
             curentLeftX = newLocalLeftCoords.x + centerCoordinates.x;
             curentLeftY = newLocalLeftCoords.y + centerCoordinates.y;
 
             let localCurentRightX = curentRightX - centerCoordinates.x;
             let localCurentRightY = curentRightY - centerCoordinates.y;
-            let newLocalRightCoords = this._rotateLine(localCurentRightX, localCurentRightY, rightAngle);
+            let newLocalRightCoords = this._rotateVector(localCurentRightX, localCurentRightY, rightAngle);
             curentRightX = newLocalRightCoords.x + centerCoordinates.x;
             curentRightY = newLocalRightCoords.y + centerCoordinates.y;
 
@@ -161,7 +161,7 @@ export default class DxfConverter {
         while (curentElement >= 0) {
             if (curve.R[curentElement] == 0) {  // it's LINE
                 let leftLength = curve.L[curentElement];
-                let leftSegment = this._rotateLine(leftLength, 0, leftDirection);
+                let leftSegment = this._rotateVector(leftLength, 0, leftDirection);
 
                 let newLeftX = leftSegment.x + curentLeftX;
                 let newLeftY = leftSegment.y + curentLeftY;
@@ -191,7 +191,7 @@ export default class DxfConverter {
 
                 let localCurentLeftX = curentLeftX - centerCoordinates.x;
                 let localCurentLeftY = curentLeftY - centerCoordinates.y;
-                let newLocalLeftCoords = this._rotateLine(localCurentLeftX, localCurentLeftY, -1 * angle);
+                let newLocalLeftCoords = this._rotateVector(localCurentLeftX, localCurentLeftY, -1 * angle);
                 curentLeftX = newLocalLeftCoords.x + centerCoordinates.x;
                 curentLeftY = newLocalLeftCoords.y + centerCoordinates.y;
 
@@ -229,7 +229,7 @@ export default class DxfConverter {
         while (curentElement < count) {
             if (curve.R[curentElement] == 0) {  // it's LINE
                 let rightLength = curve.L[curentElement];
-                let rightSegment = this._rotateLine(rightLength, 0, rightDirection);
+                let rightSegment = this._rotateVector(rightLength, 0, rightDirection);
 
                 let newRightX = rightSegment.x + curentRightX;
                 let newRightY = rightSegment.y + curentRightY;
@@ -259,7 +259,7 @@ export default class DxfConverter {
 
                 let localCurentRightX = curentRightX - centerCoordinates.x;
                 let localCurentRightY = curentRightY - centerCoordinates.y;
-                let newLocalRightCoords = this._rotateLine(localCurentRightX, localCurentRightY, angle);
+                let newLocalRightCoords = this._rotateVector(localCurentRightX, localCurentRightY, angle);
                 curentRightX = newLocalRightCoords.x + centerCoordinates.x;
                 curentRightY = newLocalRightCoords.y + centerCoordinates.y;
 
@@ -292,7 +292,52 @@ export default class DxfConverter {
             curentElement++;
         }
 
+        this._rotatePrimitives(primitives, curve.Alpha);
+        this._movePrimiteives(primitives, curve.X, curve.Y);
+
         return primitives;
+    }
+
+    _movePrimiteives(primitives, X, Y) {
+        for (let i = 0; i < primitives.length; i++) {
+            if (primitives[i] != null) {
+                if (primitives[i].type == Primitive.types.LINE) {
+                    primitives[i].x1 += X;
+                    primitives[i].y1 += Y;
+                    primitives[i].x2 += X;
+                    primitives[i].y2 += Y;
+                }
+                if (primitives[i].type == Primitive.types.ARC) {
+                    primitives[i].x += X;
+                    primitives[i].y += Y;
+                }
+            }
+        }
+    }
+
+    _rotatePrimitives(primitives, Alpha) {
+        if (Alpha < 1e-6) {
+            return;
+        }
+        for (let i = 0; i < primitives.length; i++) {
+            if (primitives[i] != null) {
+                if (primitives[i].type == Primitive.types.LINE) {
+                    const newP1 = this._rotateVector(primitives[i].x1, primitives[i].y1, Alpha);
+                    primitives[i].x1 = newP1.x;
+                    primitives[i].y1 = newP1.y;
+                    const newP2 = this._rotateVector(primitives[i].x2, primitives[i].y2, Alpha);
+                    primitives[i].x2 = newP2.x;
+                    primitives[i].y2 = newP2.y;
+                }
+                if (primitives[i].type == Primitive.types.ARC) {
+                    const newCenter = this._rotateVector(primitives[i].x, primitives[i].y, Alpha);
+                    primitives[i].x = newCenter.x;
+                    primitives[i].y = newCenter.y;
+                    primitives[i].fi1 += Alpha;
+                    primitives[i].fi2 += Alpha;
+                }
+            }
+        }
     }
 
     /**
@@ -322,7 +367,7 @@ export default class DxfConverter {
     }
 
     /**
-     * Rotate line (0; 0), (x; y)
+     * Rotate vector (0; 0), (x; y)
      * 
      * @private
      * @param {Number} x `X` coordinate of second point
@@ -330,7 +375,7 @@ export default class DxfConverter {
      * @param {Number} alfa angle in degree
      * @returns {Object} object with new `x` and `y` coordinate
      */
-    _rotateLine(x, y, alfa) {
+    _rotateVector(x, y, alfa) {
         let alfaInRad = alfa * Math.PI / 180;
         let x_ = x * Math.cos(alfaInRad) - y * Math.sin(alfaInRad);
         let y_ = x * Math.sin(alfaInRad) + y * Math.cos(alfaInRad);
@@ -344,7 +389,7 @@ export default class DxfConverter {
     _arcCenterByClockwiseTangent(x, y, R, tangentAngle) {
         let centerAngle = tangentAngle - 90;
         
-        let localCSCenter = this._rotateLine(R, 0, centerAngle);
+        let localCSCenter = this._rotateVector(R, 0, centerAngle);
         let centerX = localCSCenter.x + x;
         let centerY = localCSCenter.y + y;
 
@@ -358,7 +403,7 @@ export default class DxfConverter {
     _arcCenterByCounterClockwiseTangent (x, y, R, tangentAngle) {
         let centerAngle = tangentAngle + 90;
         
-        let localCSCenter = this._rotateLine(R, 0, centerAngle);
+        let localCSCenter = this._rotateVector(R, 0, centerAngle);
         let centerX = localCSCenter.x + x;
         let centerY = localCSCenter.y + y;
 

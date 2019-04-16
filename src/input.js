@@ -113,7 +113,6 @@ function setListener(elementsCount = 5) {
         let countInput = document.getElementById('count');
         elementsCount = Number(countInput.value);
         if (!isNaN(elementsCount) && elementsCount > 0) {
-            alert(elementsCount);
             addLayer(elementsCount);
         } else {
             alert('elemnts count should be number and more than 0');
