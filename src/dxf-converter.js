@@ -298,6 +298,12 @@ export default class DxfConverter {
         return primitives;
     }
 
+    /**
+     * @private
+     * @param {Array<Primitive>} primitives 
+     * @param {Number} X 
+     * @param {Number} Y 
+     */
     _movePrimiteives(primitives, X, Y) {
         for (let i = 0; i < primitives.length; i++) {
             if (primitives[i] != null) {
@@ -315,6 +321,11 @@ export default class DxfConverter {
         }
     }
 
+    /**
+     * @private
+     * @param {Array<Primitive>} primitives 
+     * @param {Number} Alpha angle
+     */
     _rotatePrimitives(primitives, Alpha) {
         if (Alpha < 1e-6) {
             return;
