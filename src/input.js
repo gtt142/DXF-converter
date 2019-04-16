@@ -107,9 +107,17 @@ function addLayer(elementsCount) {
 
 function setListener(elementsCount = 5) {
     // document.addEventListener('DOMContentLoaded', () => {
+
     let addLayerBtn = document.getElementById('add_layer');
     addLayerBtn.addEventListener('click', () => {
-        addLayer(elementsCount);
+        let countInput = document.getElementById('count');
+        elementsCount = Number(countInput.value);
+        if (!isNaN(elementsCount) && elementsCount > 0) {
+            alert(elementsCount);
+            addLayer(elementsCount);
+        } else {
+            alert('elemnts count should be number and more than 0');
+        }
     });
         
     // });

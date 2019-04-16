@@ -34,7 +34,12 @@ export default class DxfConverter {
      * @param {Dxf} dxfFile     dxfFile to save 
      */
     writeLARtoDxf(curve, dxfFile) {
-        const primitives = this.convertLARtoPrimitives(curve);
+        let primitives;
+        try {
+            primitives = this.convertLARtoPrimitives(curve);
+        } catch (err) {
+            throw err;
+        }
         this.writePrimitivesToDxf(primitives, dxfFile, curve.layerName);
     }
 

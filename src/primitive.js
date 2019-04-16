@@ -23,7 +23,6 @@ export default class Primitive {
                 this.fi2 = values.fi2;
                 break;
             default:
-                console.error('Unexpected primitive type: ' + type);
                 break;
         }
     }
