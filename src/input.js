@@ -19,14 +19,14 @@ class IdHolder {
 const IdManager = new IdHolder();
 
 class LayerFormColumn {
-    constructor(name) {
+    constructor(name, elementsCount) {
         this.element = document.createElement('div');
         this.element.className = 'layer_column';
         this.header = document.createElement('div');
         this.header.className = 'l_col_name';
         this.header.textContent = name;
         this.element.appendChild(this.header);
-        let count = 5;
+        let count = elementsCount;
         this.values = new Array(count);
         for (let i = 0; i < count; i++) {
             this.values[i] = document.createElement('input');
@@ -37,40 +37,52 @@ class LayerFormColumn {
 }
 
 class Layer {
-    constructor() {
+    constructor(elementsCount) {
         this._id = IdManager.id;
         this.element = document.createElement('div');
         this.element.className = 'layer';
-        this.columnL = new LayerFormColumn('L');
+        this.columnL = new LayerFormColumn('L', elementsCount);
         this.element.appendChild(this.columnL.element);
-        this.columnA = new LayerFormColumn('A');
+        this.columnA = new LayerFormColumn('A', elementsCount);
         this.element.appendChild(this.columnA.element);
-        this.columnR = new LayerFormColumn('R');
+        this.columnR = new LayerFormColumn('R', elementsCount);
         this.element.appendChild(this.columnR.element);
 
         this.irpsCol = document.createElement('div');
         this.irpsCol.className = 'layer_column';
+
         let header = document.createElement('div');
         header.className = 'l_col_name';
-        header.textContent = 'irpx';
+        header.textContent = 'X';
         this.irpsCol.appendChild(header);
-        this.irpx = document.createElement('input');
-        this.irpx.value = 2.5;
-        this.irpsCol.appendChild(this.irpx);
+        this.X = document.createElement('input');
+        this.X.value = 2.5;
+        this.irpsCol.appendChild(this.X);
+
         header = document.createElement('div');
         header.className = 'l_col_name';
-        header.textContent = 'irpy';
+        header.textContent = 'Y';
         this.irpsCol.appendChild(header);
-        this.irpy = document.createElement('input');
-        this.irpy.value = 2.5;
-        this.irpsCol.appendChild(this.irpy);
+        this.Y = document.createElement('input');
+        this.Y.value = 2.5;
+        this.irpsCol.appendChild(this.Y);
+
         header = document.createElement('div');
         header.className = 'l_col_name';
-        header.textContent = 'irpB';
+        header.textContent = 'Alpha';
         this.irpsCol.appendChild(header);
-        this.irpB = document.createElement('input');
-        this.irpB.value = 2.5;
-        this.irpsCol.appendChild(this.irpB);
+        this.Alpha = document.createElement('input');
+        this.Alpha.value = 2.5;
+        this.irpsCol.appendChild(this.Alpha);
+        
+        header = document.createElement('div');
+        header.className = 'l_col_name';
+        header.textContent = 'SP';
+        this.irpsCol.appendChild(header);
+        this.SP = document.createElement('input');
+        this.SP.value = 2.5;
+        this.irpsCol.appendChild(this.SP);
+
         header = document.createElement('div');
         header.className = 'l_col_name';
         header.textContent = 'layer';
@@ -78,24 +90,26 @@ class Layer {
         this.layerName = document.createElement('input');
         this.layerName.className = 'layer_name_input';
         this.layerName.value = 'layer_' + this._id;
+
         this.irpsCol.appendChild(this.layerName);
+
         this.element.appendChild(this.irpsCol);
     }
 }
 
-function addLayer() {
-    let layer = new Layer();
+function addLayer(elementsCount) {
+    let layer = new Layer(elementsCount);
     let containers = document.getElementsByClassName('container');
     let container = containers[0];
     container.appendChild(layer.element);
     allLayers.push(layer);
 }
 
-function setListener() {
+function setListener(elementsCount = 5) {
     // document.addEventListener('DOMContentLoaded', () => {
     let addLayerBtn = document.getElementById('add_layer');
     addLayerBtn.addEventListener('click', () => {
-        addLayer();
+        addLayer(elementsCount);
     });
         
     // });

@@ -51,15 +51,15 @@
                       </a></li>
                       
                       <li><a
-                        href='#dxfconverterconvert'
+                        href='#dxfconverterconvertlartoprimitives'
                         class='regular pre-open'>
-                        #convert
+                        #convertLARtoPrimitives
                       </a></li>
                       
                       <li><a
-                        href='#dxfconverterrotateline'
+                        href='#dxfconverterwriteprimitivestodxf'
                         class='regular pre-open'>
-                        #rotateLine
+                        #writePrimitivesToDxf
                       </a></li>
                       
                     </ul>
@@ -259,7 +259,7 @@
 
   
 
-  <p>Write array of curves to dxfFile</p>
+  <p>Write array of curves to dxfFile writeLARtoDxf()</p>
 
     <div class='pre p1 fill-light mt0'>writeLARsToDxf(curves: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>, dxfFile: <a href="#dxf">Dxf</a>)</div>
   
@@ -279,11 +279,11 @@
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>curves</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code>
-	    curves is 
-<code>[curve = {L: [{Number}], A: [{Number}], R: [{Number}], sp, x, y, z, alpha, layerName}]</code>
+	    is array: 
+<code>[curve = {L: [{Number}], A: [{Number}], R: [{Number}], SP, X, Y, Z, Alpha, layerName}]</code>
 ,
 where 
-<code>sp</code>
+<code>SP</code>
  is Start Point
 
           </div>
@@ -306,6 +306,14 @@ where
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
+      
+        <li>any: Will throw error from writeLARtoDxf
+</li>
+      
+    </ul>
   
 
   
@@ -355,10 +363,10 @@ where
           <div>
             <span class='code bold'>curve</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    curve is 
-<code>{L: [{Number}], A: [{Number}], R: [{Number}], sp, x, y, z, alpha, layerName}</code>
+<code>{L: [{Number}], A: [{Number}], R: [{Number}], SP, X, Y, Z, Alpha, layerName}</code>
 ,
 where 
-<code>sp</code>
+<code>SP</code>
  is Start Point
 
           </div>
@@ -382,120 +390,13 @@ where
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='dxfconverterconvert'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>convert(L, A, R, irpx, irpy, irpB, zCoord)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Convert LAR vectors and save polyline in array</p>
-
-    <div class='pre p1 fill-light mt0'>convert(L: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>, A: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>, R: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>, irpx: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, irpy: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, irpB: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, zCoord: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>L</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>)</code>
-	    vector L
-
-          </div>
-          
-        </div>
+        <li><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>: Will throw error if params in curve not valid
+</li>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>A</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>)</code>
-	    vector A
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>R</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>>)</code>
-	    vector R
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>irpx</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    point where x=0
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>irpy</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    point where y=0
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>irpB</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    point where cross section is horizontal
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>zCoord</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-	    z coordinate of cross section
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
+    </ul>
   
 
   
@@ -512,11 +413,11 @@ where
       </div>
     </div>
   
-    <div class='border-bottom' id='dxfconverterrotateline'>
+    <div class='border-bottom' id='dxfconverterconvertlartoprimitives'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rotateLine(x, y, alfa)</span>
+            <span class='code strong strong truncate'>convertLARtoPrimitives(curve)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -524,9 +425,9 @@ where
 
   
 
-  <p>rotation with Rotation matrix</p>
+  <p>Convert curve presented by LAR vectors to array of <code>Primitive</code></p>
 
-    <div class='pre p1 fill-light mt0'>rotateLine(x: any, y: any, alfa: any)</div>
+    <div class='pre p1 fill-light mt0'>convertLARtoPrimitives(curve: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></div>
   
   
 
@@ -543,7 +444,89 @@ where
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>x</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>curve</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    curve is 
+<code>{L: [{Number}], A: [{Number}], R: [{Number}], SP, X, Y, Z, Alpha, layerName}</code>
+,
+where 
+<code>SP</code>
+ is Start Point
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></code>:
+        primitives array
+
+      
+    
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Throws</div>
+    <ul>
+      
+        <li><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a>: Will throw error if params in curve not valid
+</li>
+      
+    </ul>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='dxfconverterwriteprimitivestodxf'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>writePrimitivesToDxf(primitives, dxfFile, layerName)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Write array of primitives to dfx file</p>
+
+    <div class='pre p1 fill-light mt0'>writePrimitivesToDxf(primitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>, dxfFile: <a href="#dxf">Dxf</a>, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>primitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>)</code>
 	    
           </div>
           
@@ -551,15 +534,16 @@ where
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>y</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
+	    dxf file object to write
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>alfa</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>layerName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
 	    
           </div>
           
@@ -1876,7 +1860,7 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>type</span> <code class='quiet'>(any
-            = <code>_LINE</code>)</code>
+            = <code>Primitive.types.LINE</code>)</code>
 	    
           </div>
           

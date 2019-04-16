@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./src/*",
-    "build": "npm run lint && webpack --mode=development"
+    "lint": "eslint ./src/*  --ignore-pattern old_*.js",
+    "build": "npm run lint && webpack --mode=development",
+    "build_-lint": "webpack --mode=development"
   },
   "repository": {
     "type": "git",

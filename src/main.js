@@ -3,8 +3,11 @@ import FileSaver from './file-saver';
 import DxfConverter from './dxf-converter';
 import {allLayers, setListener as addLayerListener} from './input';
 
+const W = 5; // zDelta
+const elementsOfCurveCount = 9;
+
 document.addEventListener('DOMContentLoaded', () => {
-    addLayerListener();
+    addLayerListener(elementsOfCurveCount);
     let saveDxfButton = document.getElementById('save_dxf');
     saveDxfButton.addEventListener('click', () => {
 
@@ -13,29 +16,35 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
+        const curves = [];
         let zCoord = 0.0;
         for (let i = 0; i < allLayers.length; i++) {
             let val;
-            val = allLayers[i].irpx.value;
+            val = allLayers[i].X.value;
             if (isNaN(val)) {
                 throw new Error('IRPX is not valid');
             }
-            let irpx = val;
-            val = allLayers[i].irpy.value;
+            let X = val;
+            val = allLayers[i].Y.value;
             if (isNaN(val)) {
                 throw new Error('IRPY is not valid');
             }
-            let irpy = val;
-            val = allLayers[i].irpB.value;
+            let Y= val;
+            val = allLayers[i].Alpha.value;
             if (isNaN(val)) {
                 throw new Error('IRPB is not valid');
             }
-            let irpB = val;
+            let Alpha = val;
+            val = allLayers[i].SP.value;
+            if (isNaN(val)) {
+                throw new Error('IRPB is not valid');
+            }
+            let SP = val;
             let L = new Array(5);
             let A = new Array(5);
             let R = new Array(5);
 
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < elementsOfCurveCount; j++) {
                 val = Number(allLayers[i].columnL.values[j].value);
                 if (isNaN(val)) {
                     throw new Error('L is not valid');
@@ -53,17 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 R[j] = val;
             }
 
-            conv.convert(L, A, R, irpx, irpy, irpB, zCoord);
-            conv.writeBody(allLayers[i].layerName.value);
+            const curve = {
+                L, A, R, SP, X, Y, Z: zCoord, Alpha, layerName: `layer_${i}`
+            };
+            curves.push(curve);    
             zCoord += W;
         }
-        
         const converter = new DxfConverter();
         const dxfFile = new Dxf();
-        converter.writeLARsToDxf
-
-
-        let text = conv.finishWriting();
-        FileSaver.saveTextToFile(text, 'file.dxf');
+        converter.writeLARsToDxf(curves, dxfFile);
+        
+        FileSaver.saveTextToFile(dxfFile.body, 'file.dxf');
     });
 });
