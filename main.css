@@ -13,12 +13,22 @@ body {
     margin: 20px; 
     display: flex;
     flex-direction: row;
+    border: 1px dashed;
+    border-radius: 7px;
+    padding: 10px;
 }
 
 .layer_column {
     display: flex;
     flex-direction: column;
 }
+
+.layer_column-sp {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
 
 input {
     width: 40px;

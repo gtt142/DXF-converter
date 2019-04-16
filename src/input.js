@@ -49,14 +49,14 @@ class Layer {
         this.element.appendChild(this.columnR.element);
 
         this.irpsCol = document.createElement('div');
-        this.irpsCol.className = 'layer_column';
+        this.irpsCol.className = 'layer_column-sp';
 
         let header = document.createElement('div');
         header.className = 'l_col_name';
         header.textContent = 'X';
         this.irpsCol.appendChild(header);
         this.X = document.createElement('input');
-        this.X.value = 2.5;
+        this.X.value = 0;
         this.irpsCol.appendChild(this.X);
 
         header = document.createElement('div');
@@ -64,7 +64,7 @@ class Layer {
         header.textContent = 'Y';
         this.irpsCol.appendChild(header);
         this.Y = document.createElement('input');
-        this.Y.value = 2.5;
+        this.Y.value = 0;
         this.irpsCol.appendChild(this.Y);
 
         header = document.createElement('div');
@@ -72,7 +72,7 @@ class Layer {
         header.textContent = 'Alpha';
         this.irpsCol.appendChild(header);
         this.Alpha = document.createElement('input');
-        this.Alpha.value = 2.5;
+        this.Alpha.value = 0;
         this.irpsCol.appendChild(this.Alpha);
         
         header = document.createElement('div');
@@ -80,7 +80,7 @@ class Layer {
         header.textContent = 'SP';
         this.irpsCol.appendChild(header);
         this.SP = document.createElement('input');
-        this.SP.value = 2.5;
+        this.SP.value = elementsCount/2;
         this.irpsCol.appendChild(this.SP);
 
         header = document.createElement('div');

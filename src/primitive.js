@@ -1,5 +1,7 @@
 /**
  * Primitive class for LINE or ARC
+ * @param {Object} values coordinates and other parameters of primitive
+ * @param {String} type of primitive
  */
 export default class Primitive {
     constructor(values, type = Primitive.types.LINE) {
@@ -27,6 +29,10 @@ export default class Primitive {
         }
     }
 
+    /**
+     * get available primitive types
+     * @returns {Object} object with available types
+     */
     static get types() {
         return {
             LINE: 'LINE',

@@ -188,10 +188,28 @@
                 
                 <li><a
                   href='#primitive'
-                  class="">
+                  class=" toggle-sibling">
                   Primitive
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#primitivetypes'
+                        class='regular pre-open'>
+                        .types
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -1834,7 +1852,7 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
 
   <p>Primitive class for LINE or ARC</p>
 
-    <div class='pre p1 fill-light mt0'>new Primitive(values: any, type: any)</div>
+    <div class='pre p1 fill-light mt0'>new Primitive(values: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, type: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
   
   
 
@@ -1851,17 +1869,19 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>values</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>values</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    coordinates and other parameters of primitive
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>type</span> <code class='quiet'>(any
+            <span class='code bold'>type</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>
             = <code>Primitive.types.LINE</code>)</code>
-	    
+	    of primitive
+
           </div>
           
         </div>
@@ -1876,6 +1896,67 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='primitivetypes'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>types</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>get available primitive types</p>
+
+    <div class='pre p1 fill-light mt0'>types</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        object with available types
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
