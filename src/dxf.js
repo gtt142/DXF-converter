@@ -9,6 +9,7 @@ export default class Dxf {
         this._header;
         this._end;
         this._entities = [];
+        this._layers = [];
         this.addDxfPoint = this.addDxfPoint.bind(this);
         this.addDxfLine = this.addDxfLine.bind(this);
         this.addDxfArc = this.addDxfArc.bind(this);
@@ -28,12 +29,134 @@ export default class Dxf {
     }
 
     /**
+     * Pushing layers for result file. If a layer with a layerName exists, it will be overwritten with the new one.
+     * @param {*} layer new layer data
+     * @param {String} layer.layerName name of new layer
+     * @param {String} [layer.layerStyle=Dxf.lineStyles.CONTINUOUS] style of new layer lines. Should be instance of `Dxf.lineStyles`
+     * @param {Number} [layer.layerColor=Dxf.color.WHITE] color of lines on new layer. Should be instance of `Dxf.colors`
+     */
+    pushLayer({layerName, layerStyle, layerColor}) {
+        if (!layerName) {
+            return;
+        }
+        const index = this._layers.findIndex(el => el.layerName === layerName);
+        if (index < 0) {
+            this._layers.push({layerName, layerStyle, layerColor});
+        } else {
+            this._layers[index] = {layerName, layerStyle, layerColor};
+        }
+    }
+
+    /**
+     * get available AutoCAD colors
+     * <ul>
+     * <li>BLACK</li>
+     * <li>RED</li>
+     * <li>YELLOW</li>
+     * <li>GREEN</li>
+     * <li>AQUA</li>
+     * <li>BLUE</li>
+     * <li>MAGENTA</li>
+     * <li>WHITE</li>
+     * <li>GRAY</li>
+     * <li>GREY</li>
+     * </ul>
+     * @returns {Object} object with available colors
+     */
+    static get colors() {
+        return {
+            BLACK: 250,
+            RED: 1,
+            YELLOW: 2,
+            GREEN: 3,
+            AQUA: 4,
+            BLUE: 5,
+            MAGENTA: 6,
+            WHITE: 7,
+            GRAY: 8,
+            GREY: 9
+        };
+    }
+
+    /**
+     * get available drawing line styles
+     * <ul>
+     * <li>CONTINUOUS / Сплошная — ( ⸻⸻ )</li>
+     * <li>LONG_DASHED_DOTTED / Штрихпунктирная — ( ⸺ .⸺ . ⸺ . ⸺ )</li>
+     * </ul>
+     * @returns {Object} object with available line styles
+     */
+    static get lineStyles() {
+        return {
+            CONTINUOUS: 'CONTINUOUS',
+            LONG_DASHED_DOTTED: 'LONG_DASHED_DOTTED',
+        };
+    }
+
+    /**
      * Return dxf header block string
      * @private
      */
     getDxfHeader() {
         let header = '';
-        for (let str of dxfHeader) {
+        //  HEADER
+        for (let str of headerSection) {
+            header += str + '\n';
+        }
+
+        //  TABLES
+        for (let str of tablesSectionStart) {
+            header += str + '\n';
+        }
+
+        //  VPORT
+        for (let str of vportTable) {
+            header += str + '\n';
+        }
+
+        //  LINES
+        for (let str of linesTable) {
+            header += str + '\n';
+        }
+
+        //  LAYERS
+        header += '0\n';
+        header += 'TABLE\n';
+        header += '2\n';
+        header += 'LAYER\n';
+        header += '70\n';
+        header += '2\n';
+        for (const layer of this._layers) {
+            header += '0\n';
+            header += 'LAYER\n';
+            header += '2\n';
+            header += `${layer.layerName}\n`;
+            header += '70\n';
+            header += '0\n';
+            header += '6\n';
+            if (layer.layerStyle) {
+                header += `${layer.layerStyle}\n`;
+            } else {
+                header += `${Dxf.lineStyles.CONTINUOUS}\n`;
+            }
+            header += '62\n';
+            if (!isNaN(layer.layerColor) && layer.layerColor > 0 && layer.layerColor <=255) {
+                header += `${layer.layerColor}\n`;
+            } else {
+                header += '7\n'; // white color
+            }
+        }
+        header += '0\n';
+        header += 'ENDTAB\n';
+        //END LAYERS
+
+        //  TABLES ENDSEC
+        for (let str of tablesSectionEnd) {
+            header += str + '\n';
+        }
+
+        // ENTITIES
+        for (let str of entitiesSectionStart) {
             header += str + '\n';
         }
         return header;
@@ -60,7 +183,7 @@ export default class Dxf {
      * @param {Number} z coordinate `z`
      * @param {String} layer the name of the layer to place the object
      */
-    addDxfPoint(x, y, z, layer='DefLayer') {
+    addDxfPoint(x, y, z, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
             throw new Error('Wrong data format');
         }
@@ -89,7 +212,7 @@ export default class Dxf {
      * @param {Number} z2 coordinate `z` of second point
      * @param {String} layer the name of the layer to place the object
      */
-    addDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
+    addDxfLine(x1, y1, z1, x2, y2, z2, layer='default_layer') {
         if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
             throw new Error('Wrong data format');
         }
@@ -124,7 +247,7 @@ export default class Dxf {
      * @param {Number} fi_end end angle of the arc
      * @param {String} layer the name of the layer to place the object
      */
-    addDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
+    addDxfArc(x, y, z, R, fi_start, fi_end, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
             throw new Error('Wrong data format');
         }
@@ -157,7 +280,7 @@ export default class Dxf {
      * @param {Number} R radius of the circle
      * @param {String} layer the name of the layer to place the object
      */
-    addDxfCircle(x, y, z, R, layer='DefLayer') {
+    addDxfCircle(x, y, z, R, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
             throw new Error('Wrong data format');
         }
@@ -194,7 +317,7 @@ export default class Dxf {
      * @param {String} layer the name of the layer to place the object
      * @returns {String} entity as dxf string
      */
-    static getDxfPoint(x, y, z, layer='DefLayer') {
+    static getDxfPoint(x, y, z, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
             throw new Error('Wrong data format');
         }
@@ -224,7 +347,7 @@ export default class Dxf {
      * @param {String} layer the name of the layer to place the object
      * @returns {String} entity as dxf string
      */
-    static getDxfLine(x1, y1, z1, x2, y2, z2, layer='DefLayer') {
+    static getDxfLine(x1, y1, z1, x2, y2, z2, layer='default_layer') {
         if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
             throw new Error('Wrong data format');
         }
@@ -260,7 +383,7 @@ export default class Dxf {
      * @param {String} layer the name of the layer to place the object
      * @returns {String} entity as dxf string
      */
-    static getDxfArc(x, y, z, R, fi_start, fi_end, layer='DefLayer') {
+    static getDxfArc(x, y, z, R, fi_start, fi_end, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
             throw new Error('Wrong data format');
         }
@@ -294,7 +417,7 @@ export default class Dxf {
      * @param {String} layer the name of the layer to place the object
      * @returns {String} entity as dxf string
      */
-    static getDxfCircle(x, y, z, R, layer='DefLayer') {
+    static getDxfCircle(x, y, z, R, layer='default_layer') {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
             throw new Error('Wrong data format');
         }
@@ -319,7 +442,7 @@ export default class Dxf {
  * Header strings for DXF file.
  * @type {string[]}
  */
-const dxfHeader = [
+const headerSection = [
     '0',
     'SECTION',
     '2',
@@ -342,10 +465,14 @@ const dxfHeader = [
     '2',
     '0',
     'ENDSEC',
+];
+const tablesSectionStart = [
     '0',
     'SECTION',
     '2',
     'TABLES',
+];
+const vportTable = [
     '0',
     'TABLE',
     '2',
@@ -426,8 +553,61 @@ const dxfHeader = [
     '0',
     '0',
     'ENDTAB',
+];
+const linesTable = [
+    '0',
+    'TABLE',
+    '2',
+    'LTYPE',
+    '70',
+    '2',
+    //  CONTINUOUS line description
+    '0',
+    'LTYPE',
+    '2',
+    'CONTINUOUS',
+    '70',
+    '0',
+    '3',
+    'Solid line',
+    '72',
+    '65',
+    '73',
+    '0',
+    '40',
+    '0.0',
+    //  LONG_DASHED_DOTTED line description
+    '0',
+    'LTYPE',
+    '2',
+    'LONG_DASHED_DOTTED',
+    '70',
+    '0',
+    '3',
+    'Long dashed dotted __ . __ . __ . __ . __ . __ . _',
+    '72',
+    '65',
+    '73',
+    '4',
+    '40',
+    '1.0',
+    '49',
+    '7', //  dash length
+    '49',
+    '-1.0', //  before dot length
+    '49',
+    '1.0', //  dot(line) length
+    '49',
+    '-1.0', //  after dot length
+    //  lines description end
+    '0',
+    'ENDTAB',   
+];
+const tablesSectionEnd = [
     '0',
     'ENDSEC',
+];
+const entitiesSectionStart = [
     '0',
     'SECTION',
     '2',

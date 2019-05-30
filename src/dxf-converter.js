@@ -44,6 +44,72 @@ export default class DxfConverter {
     }
 
     /**
+     * Write sections to dxfFile
+     * @param {Array} sections array of sections
+     * @param {Dxf} dxfFile dxfFile to save
+     */
+    writeSectionsToDxf(sections, dxfFile) {
+        // TODO layerName
+        for(const [key, section] of sections.entries()) {
+            try {
+                this.writeSectionToDxf(section, dxfFile, `layer_${key}`);
+            } catch (err) {
+                throw err;
+            }
+        }
+    }
+
+    /**
+     * Write section to dxfFile
+     * @param {Object} section array of primitives {primitives: [line | arc], ...}
+     * @param {Dxf} dxfFile dxfFile to save 
+     * @param {String} layerName name of layer where section will be placed
+     */
+    writeSectionToDxf(section, dxfFile, layerName) {
+        let primitives;
+        try {
+            primitives = this.convertSectionToPrimitives(section);
+        } catch (err) {
+            throw err;
+        }
+        this.writePrimitivesToDxf(primitives, dxfFile, layerName);
+    }
+
+    /**
+     * Convert section.primitives to array of `Primitives`
+     * @param {*} section 
+     * @returns {Array<Primitive>} primitives array
+     */
+    convertSectionToPrimitives(section) {
+        const primitives = [];
+        for (const primitive of section.primitives) {
+            switch (primitive.type.toUpperCase()) {
+                case Primitive.types.LINE:
+                    primitives.push(new Primitive({
+                        x1: primitive.x1,
+                        y1: primitive.y1,
+                        z1: primitive.z1,
+                        x2: primitive.x2,
+                        y2: primitive.y2,
+                        z2: primitive.z2,
+                    }, Primitive.types.LINE));
+                    break;
+                case Primitive.types.ARC:
+                    primitives.push(new Primitive({
+                        x: primitive.x,
+                        y: primitive.y,
+                        z: primitive.z,
+                        R: primitive.R,
+                        fi1: primitive.fi_start,
+                        fi2: primitive.fi_end,
+                    }, Primitive.types.ARC));
+                    break;
+            }
+        }
+        return primitives;
+    }
+
+    /**
      * Convert curve presented by LAR vectors to array of `Primitive`
      * @throws {Error} Will throw error if params in curve not valid
      * @param {Object} curve curve is `{L: [{Number}], A: [{Number}], R: [{Number}], SP, X, Y, Z, Alpha, layerName}`,

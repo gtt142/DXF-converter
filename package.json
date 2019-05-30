@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src/*  --ignore-pattern old_*.js",
     "build": "npm run lint && webpack --mode=development",
-    "build_-lint": "webpack --mode=development"
+    "build_-lint": "webpack --mode=development",
+    "docs": "documentation build src/** -f html -o docs"
   },
   "repository": {
     "type": "git",
