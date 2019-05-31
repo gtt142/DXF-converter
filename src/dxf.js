@@ -1,12 +1,12 @@
-const VPORT_HEIGHT = 200;
-
 /**
  * Dxf file class.
  * version of dxf - AC1009 (R12/LT2 DXF)
  */
 export default class Dxf { 
     constructor() {
+        this._VportHeight = 200;
         this._header;
+        this._MaxAbsY;
         this._end;
         this._entities = [];
         this._layers = [];
@@ -26,6 +26,24 @@ export default class Dxf {
         result += this._entities.join('');
         result += this.getDxfEnd();
         return result;
+    }
+
+    /**
+     * VportHeight getter
+     * @returns {number} VPORT_HEIGHT value
+     */
+    get VportHeight() {
+        return this._VportHeight;
+    }
+
+    /**
+     * VportHeight setter
+     * @param {number} value new Vport height
+     */
+    set VportHeight(value) {
+        if (!isNaN(value)) {
+            this._VportHeight = Number(value);
+        }
     }
 
     /**
@@ -98,6 +116,9 @@ export default class Dxf {
      * @private
      */
     getDxfHeader() {
+        if (!isNaN(this._MaxAbsY)) {
+            this._VportHeight = 2 * 1.2 * this._MaxAbsY;
+        }
         let header = '';
         //  HEADER
         for (let str of headerSection) {
@@ -109,8 +130,13 @@ export default class Dxf {
             header += str + '\n';
         }
 
-        //  VPORT
-        for (let str of vportTable) {
+        //  VPORT part 1
+        for (let str of vportTable_Part1) {
+            header += str + '\n';
+        }
+        header += `${this._VportHeight}\n`;
+        //  VPORT part 2
+        for (let str of vportTable_Part2) {
             header += str + '\n';
         }
 
@@ -175,6 +201,12 @@ export default class Dxf {
         return str;
     }
 
+    _updateMaxY(newMaxY) {
+        if (newMaxY > this._MaxAbsY || this._MaxAbsY === undefined || this._MaxAbsY === null) {
+            this._MaxAbsY = newMaxY;
+        }
+    }
+
     /**
      * Add POINT to entities section in dxf
      * 
@@ -187,6 +219,7 @@ export default class Dxf {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z))) {
             throw new Error('Wrong data format');
         }
+        this._updateMaxY(Math.abs(y));
         let entity = '';
         entity += '0\n';
         entity += 'POINT\n';
@@ -216,6 +249,7 @@ export default class Dxf {
         if (isNaN(Number(x1)) || isNaN(Number(y1)) || isNaN(Number(z1)) || isNaN(Number(x2)) || isNaN(Number(y2)) || isNaN(Number(z2))) {
             throw new Error('Wrong data format');
         }
+        this._updateMaxY(Math.max(Math.abs(y1), Math.abs(y2)));
         let entity = '';
         entity += '0\n';
         entity += 'LINE\n';
@@ -251,6 +285,10 @@ export default class Dxf {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R)) || isNaN(Number(fi_start)) || isNaN(Number(fi_end))) {
             throw new Error('Wrong data format');
         }
+        if (R < 0) {
+            throw new Error('Radius shouldn`t be negative');
+        }
+        this._updateMaxY(Math.abs(y + (Math.sign(y) | 1) * R));
         let entity = '';
         entity += '0\n';
         entity += 'ARC\n';
@@ -284,6 +322,10 @@ export default class Dxf {
         if (isNaN(Number(x)) || isNaN(Number(y)) || isNaN(Number(z)) || isNaN(Number(R))) {
             throw new Error('Wrong data format');
         }
+        if (R < 0) {
+            throw new Error('Radius shouldn`t be negative');
+        }
+        this._updateMaxY(Math.abs(y + (Math.sign(y) | 1) * R));
         let entity = '';
         entity += '0\n';
         entity += 'CIRCLE\n';
@@ -472,7 +514,7 @@ const tablesSectionStart = [
     '2',
     'TABLES',
 ];
-const vportTable = [
+const vportTable_Part1 = [
     '0',
     'TABLE',
     '2',
@@ -522,9 +564,10 @@ const vportTable = [
     '37',
     '0.0',
     '40',
-    VPORT_HEIGHT,
+];
+const vportTable_Part2 = [
     '41',
-    '1.0',
+    '2.5',
     '42',
     '50.0',
     '43',

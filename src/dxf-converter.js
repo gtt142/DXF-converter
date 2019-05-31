@@ -393,7 +393,7 @@ export default class DxfConverter {
      * @param {Number} Alpha angle
      */
     _rotatePrimitives(primitives, Alpha) {
-        if (Alpha < 1e-6) {
+        if (Math.abs(Alpha) < 1e-6) {
             return;
         }
         for (let i = 0; i < primitives.length; i++) {
@@ -453,6 +453,9 @@ export default class DxfConverter {
      * @returns {Object} object with new `x` and `y` coordinate
      */
     _rotateVector(x, y, alfa) {
+        if (Math.abs(alfa) < 1e-6) {
+            return;
+        }
         let alfaInRad = alfa * Math.PI / 180;
         let x_ = x * Math.cos(alfaInRad) - y * Math.sin(alfaInRad);
         let y_ = x * Math.sin(alfaInRad) + y * Math.cos(alfaInRad);
