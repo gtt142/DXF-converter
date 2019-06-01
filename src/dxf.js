@@ -53,7 +53,7 @@ export default class Dxf {
      * @param {String} [layer.layerStyle=Dxf.lineStyles.CONTINUOUS] style of new layer lines. Should be instance of `Dxf.lineStyles`
      * @param {Number} [layer.layerColor=Dxf.color.WHITE] color of lines on new layer. Should be instance of `Dxf.colors`
      */
-    pushLayer({layerName, layerStyle, layerColor}) {
+    addLayer({layerName, layerStyle, layerColor}) {
         if (!layerName) {
             return;
         }
@@ -87,7 +87,7 @@ export default class Dxf {
             RED: 1,
             YELLOW: 2,
             GREEN: 3,
-            AQUA: 4,
+            CYAN: 4,
             BLUE: 5,
             MAGENTA: 6,
             WHITE: 7,

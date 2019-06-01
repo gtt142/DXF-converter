@@ -432,7 +432,7 @@ export default class DxfConverter {
                             primitive.x2, primitive.y2, primitive.z2, layerName);
                         break;
                     case Primitive.types.ARC:
-                        if (primitive.fi2 - primitive.fi1 != 0)
+                        if (primitive.fi2 - primitive.fi1 !== 0)
                             dxfFile.addDxfArc(primitive.x, primitive.y, primitive.z, 
                                 primitive.R, primitive.fi1, primitive.fi2, layerName);
                         break;

@@ -277,8 +277,8 @@ function saveAllLayers() {
     const converter = new DxfConverter();
     const dxfFile = new Dxf();
     // converter.writeSectionToDxf(section1, dxfFile, 'layerQWERTY');
-    dxfFile.pushLayer({layerName: 'layer_1', layerColor: Dxf.colors.AQUA});
-    dxfFile.pushLayer({layerName: 'layer_0', layerColor: Dxf.colors.WHITE, layerStyle: Dxf.lineStyles.LONG_DASHED_DOTTED});
+    dxfFile.addLayer({layerName: 'layer_1', layerColor: Dxf.colors.CYAN});
+    dxfFile.addLayer({layerName: 'layer_0', layerColor: Dxf.colors.WHITE, layerStyle: Dxf.lineStyles.LONG_DASHED_DOTTED});
     converter.writeSectionsToDxf(sections, dxfFile);
     FileSaver.saveTextToFile(dxfFile.body, 'prim.dxf');
 }
