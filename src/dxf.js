@@ -151,7 +151,18 @@ export default class Dxf {
         header += '2\n';
         header += 'LAYER\n';
         header += '70\n';
+        header += `${this._layers.length + 1}\n`;
+        // add default layer (0)
+        header += '0\n';
+        header += 'LAYER\n';
         header += '2\n';
+        header += '0\n';
+        header += '70\n';
+        header += '0\n';
+        header += '62\n';
+        header += '7\n';
+        header += '6\n';
+        header += 'CONTINUOUS\n';
         for (const layer of this._layers) {
             header += '0\n';
             header += 'LAYER\n';
@@ -603,7 +614,7 @@ const linesTable = [
     '2',
     'LTYPE',
     '70',
-    '2',
+    '3', // lines_count+1 
     //  CONTINUOUS line description
     '0',
     'LTYPE',
@@ -631,11 +642,11 @@ const linesTable = [
     '72',
     '65',
     '73',
-    '4',
+    '4', // elements count
     '40',
-    '1.0',
+    '10.0', // total length
     '49',
-    '7', //  dash length
+    '7.0', //  dash length
     '49',
     '-1.0', //  before dot length
     '49',

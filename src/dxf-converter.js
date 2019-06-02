@@ -454,7 +454,7 @@ export default class DxfConverter {
      */
     _rotateVector(x, y, alfa) {
         if (Math.abs(alfa) < 1e-6) {
-            return;
+            return {x, y};
         }
         let alfaInRad = alfa * Math.PI / 180;
         let x_ = x * Math.cos(alfaInRad) - y * Math.sin(alfaInRad);
