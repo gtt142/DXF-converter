@@ -22,9 +22,9 @@ export default class Dxf {
      */
     get body() {
         let result;
-        result = this.getDxfHeader();
+        result = this._getDxfHeader();
         result += this._entities.join('');
-        result += this.getDxfEnd();
+        result += this._getDxfEnd();
         return result;
     }
 
@@ -50,18 +50,18 @@ export default class Dxf {
      * Pushing layers for result file. If a layer with a layerName exists, it will be overwritten with the new one.
      * @param {*} layer new layer data
      * @param {String} layer.layerName name of new layer
-     * @param {String} [layer.layerStyle=Dxf.lineStyles.CONTINUOUS] style of new layer lines. Should be instance of `Dxf.lineStyles`
+     * @param {String} [layer.lineType=Dxf.lineTypes.CONTINUOUS] style of new layer lines. Should be instance of `Dxf.lineTypes`
      * @param {Number} [layer.layerColor=Dxf.color.WHITE] color of lines on new layer. Should be instance of `Dxf.colors`
      */
-    addLayer({layerName, layerStyle, layerColor}) {
+    addLayer({layerName, lineType, layerColor}) {
         if (!layerName) {
             return;
         }
         const index = this._layers.findIndex(el => el.layerName === layerName);
         if (index < 0) {
-            this._layers.push({layerName, layerStyle, layerColor});
+            this._layers.push({layerName, lineType, layerColor});
         } else {
-            this._layers[index] = {layerName, layerStyle, layerColor};
+            this._layers[index] = {layerName, lineType, layerColor};
         }
     }
 
@@ -97,14 +97,14 @@ export default class Dxf {
     }
 
     /**
-     * get available drawing line styles
+     * get available drawing line types
      * <ul>
      * <li>CONTINUOUS / Сплошная — ( ⸻⸻ )</li>
      * <li>LONG_DASHED_DOTTED / Штрихпунктирная — ( ⸺ .⸺ . ⸺ . ⸺ )</li>
      * </ul>
-     * @returns {Object} object with available line styles
+     * @returns {Object} object with available line types
      */
-    static get lineStyles() {
+    static get lineTypes() {
         return {
             CONTINUOUS: 'CONTINUOUS',
             LONG_DASHED_DOTTED: 'LONG_DASHED_DOTTED',
@@ -115,7 +115,7 @@ export default class Dxf {
      * Return dxf header block string
      * @private
      */
-    getDxfHeader() {
+    _getDxfHeader() {
         if (!isNaN(this._MaxAbsY)) {
             this._VportHeight = 2 * 1.2 * this._MaxAbsY;
         }
@@ -171,10 +171,10 @@ export default class Dxf {
             header += '70\n';
             header += '0\n';
             header += '6\n';
-            if (layer.layerStyle) {
-                header += `${layer.layerStyle}\n`;
+            if (layer.lineType) {
+                header += `${layer.lineType}\n`;
             } else {
-                header += `${Dxf.lineStyles.CONTINUOUS}\n`;
+                header += `${Dxf.lineTypes.CONTINUOUS}\n`;
             }
             header += '62\n';
             if (!isNaN(layer.layerColor) && layer.layerColor > 0 && layer.layerColor <=255) {
@@ -203,7 +203,7 @@ export default class Dxf {
      * Return dxf end block string
      * @private
      */
-    getDxfEnd() {
+    _getDxfEnd() {
         let str = '';
         str += '0\n';
         str += 'ENDSEC\n';

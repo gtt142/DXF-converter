@@ -1,14 +1,10 @@
 import Primitive from './primitive';
+import Dxf from './dxf';
 
 /**
  * DxfCoverter class
  */
-export default class DxfConverter { 
-    constructor() {
-        this.writeLARsToDxf = this.writeLARsToDxf.bind(this);
-        this.writeLARtoDxf = this.writeLARtoDxf.bind(this);
-    }
-
+export default class DxfConverter {
     /**
      * Write array of curves to dxfFile writeLARtoDxf()
      * @throws Will throw error from writeLARtoDxf
@@ -48,11 +44,10 @@ export default class DxfConverter {
      * @param {Array} sections array of sections
      * @param {Dxf} dxfFile dxfFile to save
      */
-    writeSectionsToDxf(sections, dxfFile) {
-        // TODO layerName
-        for(const [key, section] of sections.entries()) {
+    writeSectionsToDxf(sectionsData, dxfFile) {
+        for(const [key, section] of sectionsData.sections.entries()) {
             try {
-                this.writeSectionToDxf(section, dxfFile, `layer_${key}`);
+                this.writeSectionToDxf(section, dxfFile, key+1);
             } catch (err) {
                 throw err;
             }
@@ -61,18 +56,76 @@ export default class DxfConverter {
 
     /**
      * Write section to dxfFile
-     * @param {Object} section array of primitives {primitives: [line | arc], ...}
+     * @param {Object} section section with neutralLine, profile and rollers
      * @param {Dxf} dxfFile dxfFile to save 
      * @param {String} layerName name of layer where section will be placed
      */
-    writeSectionToDxf(section, dxfFile, layerName) {
-        let primitives;
+    writeSectionToDxf(section, dxfFile, sectionNumber) {
+        if (section.neutralPolyline && Array.isArray(section.neutralPolyline.primitives)) {
+            let layerName = `S${sectionNumber}_neutral_line`;
+            dxfFile.addLayer(
+                {
+                    layerName,
+                    layerColor: Dxf.colors.YELLOW,
+                    lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
+                }
+            );
+            this._convertAndWritePrimitives(section.neutralPolyline.primitives, dxfFile, layerName);
+        }
+
+        if (section.profileSections && Array.isArray(section.profileSections.primitives)) {
+            let layerName = `S${sectionNumber}_equidistants`;
+            dxfFile.addLayer(
+                {
+                    layerName,
+                    layerColor: Dxf.colors.RED,
+                }
+            );
+            this._convertAndWritePrimitives(section.profileSections.primitives, dxfFile, layerName);
+        }
+
+        if (section.rollers && Array.isArray(section.rollers)) {
+            for (const [rNumber, roller] of section.rollers.entries()) {
+                if (Array.isArray(roller.primitives)) {
+                    let rollerGeometry = roller.primitives;
+                    let axis;
+                    if (roller.axisId) {
+                        rollerGeometry = roller.primitives.filter(primitive => primitive.id !== roller.axisId);
+                        axis = roller.primitives.filter(primitive => primitive.id === roller.axisId);
+                    }
+
+                    let layerName = `S${sectionNumber}_roller_${rNumber}`;
+                    dxfFile.addLayer(
+                        {
+                            layerName,
+                            layerColor: Dxf.colors.BLUE,
+                        }
+                    );
+                    this._convertAndWritePrimitives(rollerGeometry, dxfFile, layerName);
+                    
+                    layerName = `S${sectionNumber}_roller_axis_${rNumber}`;
+                    dxfFile.addLayer(
+                        {
+                            layerName,
+                            layerColor: Dxf.colors.GRAY,
+                            lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
+                        }
+                    );
+                    this._convertAndWritePrimitives(axis, dxfFile, layerName);
+                }
+            }
+        }
+
+    }
+
+    _convertAndWritePrimitives(primitives, dxfFile, layerName) {
+        let primitivesLocal;
         try {
-            primitives = this.convertSectionToPrimitives(section);
+            primitivesLocal = this.convertCommonPrimitivesToPrimitives(primitives);
         } catch (err) {
             throw err;
         }
-        this.writePrimitivesToDxf(primitives, dxfFile, layerName);
+        this.writePrimitivesToDxf(primitivesLocal, dxfFile, layerName);
     }
 
     /**
@@ -80,9 +133,9 @@ export default class DxfConverter {
      * @param {*} section 
      * @returns {Array<Primitive>} primitives array
      */
-    convertSectionToPrimitives(section) {
+    convertCommonPrimitivesToPrimitives(primitivesCommon) {
         const primitives = [];
-        for (const primitive of section.primitives) {
+        for (const primitive of primitivesCommon) {
             switch (primitive.type.toUpperCase()) {
                 case Primitive.types.LINE:
                     primitives.push(new Primitive({

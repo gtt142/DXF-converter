@@ -63,9 +63,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#dxfconverterconvertsectiontoprimitives'
+                        href='#dxfconverterconvertcommonprimitivestoprimitives'
                         class='regular pre-open'>
-                        #convertSectionToPrimitives
+                        #convertCommonPrimitivesToPrimitives
                       </a></li>
                       
                       <li><a
@@ -108,9 +108,9 @@
                       </a></li>
                     
                       <li><a
-                        href='#dxflinestyles'
+                        href='#dxflinetypes'
                         class='regular pre-open'>
-                        .lineStyles
+                        .lineTypes
                       </a></li>
                     
                       <li><a
@@ -483,7 +483,7 @@ where
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>writeSectionsToDxf(sections, dxfFile)</span>
+            <span class='code strong strong truncate'>writeSectionsToDxf(sectionsData, dxfFile, sections)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -493,7 +493,7 @@ where
 
   <p>Write sections to dxfFile</p>
 
-    <div class='pre p1 fill-light mt0'>writeSectionsToDxf(sections: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>, dxfFile: <a href="#dxf">Dxf</a>)</div>
+    <div class='pre p1 fill-light mt0'>writeSectionsToDxf(sectionsData: any, dxfFile: <a href="#dxf">Dxf</a>, sections: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</div>
   
   
 
@@ -510,9 +510,8 @@ where
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>sections</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code>
-	    array of sections
-
+            <span class='code bold'>sectionsData</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
@@ -521,6 +520,15 @@ where
           <div>
             <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
 	    dxfFile to save
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sections</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code>
+	    array of sections
 
           </div>
           
@@ -553,7 +561,7 @@ where
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>writeSectionToDxf(section, dxfFile, layerName)</span>
+            <span class='code strong strong truncate'>writeSectionToDxf(section, dxfFile, sectionNumber, layerName)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -563,7 +571,7 @@ where
 
   <p>Write section to dxfFile</p>
 
-    <div class='pre p1 fill-light mt0'>writeSectionToDxf(section: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, dxfFile: <a href="#dxf">Dxf</a>, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+    <div class='pre p1 fill-light mt0'>writeSectionToDxf(section: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, dxfFile: <a href="#dxf">Dxf</a>, sectionNumber: any, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
   
   
 
@@ -581,9 +589,7 @@ where
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>section</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    array of primitives {primitives: 
-[line | arc]
-, ...}
+	    section with neutralLine, profile and rollers
 
           </div>
           
@@ -594,6 +600,14 @@ where
             <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
 	    dxfFile to save
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sectionNumber</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
@@ -630,11 +644,11 @@ where
       </div>
     </div>
   
-    <div class='border-bottom' id='dxfconverterconvertsectiontoprimitives'>
+    <div class='border-bottom' id='dxfconverterconvertcommonprimitivestoprimitives'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>convertSectionToPrimitives(section)</span>
+            <span class='code strong strong truncate'>convertCommonPrimitivesToPrimitives(primitivesCommon, section)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -644,7 +658,7 @@ where
 
   <p>Convert section.primitives to array of <code>Primitives</code></p>
 
-    <div class='pre p1 fill-light mt0'>convertSectionToPrimitives(section: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></div>
+    <div class='pre p1 fill-light mt0'>convertCommonPrimitivesToPrimitives(primitivesCommon: any, section: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></div>
   
   
 
@@ -658,6 +672,14 @@ where
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
     <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>primitivesCommon</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
       
         <div class='space-bottom0'>
           <div>
@@ -977,11 +999,11 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='dxflinestyles'>
+    <div class='border-bottom' id='dxflinetypes'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>lineStyles</span>
+            <span class='code strong strong truncate'>lineTypes</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -989,13 +1011,13 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
 
   
 
-  <p>get available drawing line styles</p>
+  <p>get available drawing line types</p>
 <ul>
 <li>CONTINUOUS / Сплошная — ( ⸻⸻ )</li>
 <li>LONG_DASHED_DOTTED / Штрихпунктирная — ( ⸺ .⸺ . ⸺ . ⸺ )</li>
 </ul>
 
-    <div class='pre p1 fill-light mt0'>lineStyles</div>
+    <div class='pre p1 fill-light mt0'>lineTypes</div>
   
   
 
@@ -1014,7 +1036,7 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
-        object with available line styles
+        object with available line types
 
       
     
@@ -1752,12 +1774,12 @@ version of dxf - AC1009 (R12/LT2 DXF)</p>
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>layer.layerStyle</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  <td class='break-word'><span class='code bold'>layer.lineType</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
   
-    (default <code>Dxf.lineStyles.CONTINUOUS</code>)
+    (default <code>Dxf.lineTypes.CONTINUOUS</code>)
   </td>
   <td class='break-word'><span>style of new layer lines. Should be instance of 
-<code>Dxf.lineStyles</code>
+<code>Dxf.lineTypes</code>
 </span></td>
 </tr>
 
