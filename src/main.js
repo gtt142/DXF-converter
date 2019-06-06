@@ -474,7 +474,13 @@ function saveAllLayers() {
                 profileSections: profile,
                 rollers: [roller1, roller2],
             }
-        ]
+        ],
+        // colors: {
+        //     rollers: 2,
+        //     rollersAxis: 3,
+        //     neutral: 9,
+        //     profile: 6,
+        // }
     };
 
     // // const sections = [section1, section3, section2, section4];

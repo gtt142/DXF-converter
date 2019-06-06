@@ -47,7 +47,7 @@ export default class DxfConverter {
     writeSectionsToDxf(sectionsData, dxfFile) {
         for(const [key, section] of sectionsData.sections.entries()) {
             try {
-                this.writeSectionToDxf(section, dxfFile, key+1);
+                this.writeSectionToDxf(section, dxfFile, key+1, sectionsData.colors);
             } catch (err) {
                 throw err;
             }
@@ -60,13 +60,19 @@ export default class DxfConverter {
      * @param {Dxf} dxfFile dxfFile to save 
      * @param {String} layerName name of layer where section will be placed
      */
-    writeSectionToDxf(section, dxfFile, sectionNumber) {
+    writeSectionToDxf(section, dxfFile, sectionNumber, colors) {
         if (section.neutralPolyline && Array.isArray(section.neutralPolyline.primitives)) {
             let layerName = `S${sectionNumber}_neutral_line`;
+            let layerColor;
+            if (colors && colors.rollers) {
+                layerColor = this._getDxfColor(colors.neutral);
+            } else {
+                layerColor = Dxf.colors.YELLOW;
+            }
             dxfFile.addLayer(
                 {
                     layerName,
-                    layerColor: Dxf.colors.YELLOW,
+                    layerColor,
                     lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
                 }
             );
@@ -75,10 +81,16 @@ export default class DxfConverter {
 
         if (section.profileSections && Array.isArray(section.profileSections.primitives)) {
             let layerName = `S${sectionNumber}_equidistants`;
+            let layerColor;
+            if (colors && colors.rollers) {
+                layerColor = this._getDxfColor(colors.profile);
+            } else {
+                layerColor = Dxf.colors.RED;
+            }
             dxfFile.addLayer(
                 {
                     layerName,
-                    layerColor: Dxf.colors.RED,
+                    layerColor,
                 }
             );
             this._convertAndWritePrimitives(section.profileSections.primitives, dxfFile, layerName);
@@ -95,19 +107,30 @@ export default class DxfConverter {
                     }
 
                     let layerName = `S${sectionNumber}_roller_${rNumber}`;
+                    let layerColor;
+                    if (colors && colors.rollers) {
+                        layerColor = this._getDxfColor(colors.rollers);
+                    } else {
+                        layerColor = Dxf.colors.BLUE;
+                    }
                     dxfFile.addLayer(
                         {
                             layerName,
-                            layerColor: Dxf.colors.BLUE,
+                            layerColor,
                         }
                     );
                     this._convertAndWritePrimitives(rollerGeometry, dxfFile, layerName);
                     
                     layerName = `S${sectionNumber}_roller_axis_${rNumber}`;
+                    if (colors && colors.rollers) {
+                        layerColor = this._getDxfColor(colors.rollersAxis);
+                    } else {
+                        layerColor = Dxf.colors.GRAY;
+                    }
                     dxfFile.addLayer(
                         {
                             layerName,
-                            layerColor: Dxf.colors.GRAY,
+                            layerColor,
                             lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
                         }
                     );
@@ -116,6 +139,32 @@ export default class DxfConverter {
             }
         }
 
+    }
+
+    _getDxfColor(color) {
+        switch (color) {
+            case 1:
+                return Dxf.colors.RED;
+            case 2:
+                return Dxf.colors.YELLOW;
+            case 3:
+                return Dxf.colors.GREEN;
+            case 4:
+                return Dxf.colors.CYAN;
+            case 5:
+                return Dxf.colors.BLUE;
+            case 6:
+                return Dxf.colors.MAGENTA;
+            case 7:
+                return Dxf.colors.WHITE;
+            case 8:
+                return Dxf.colors.GRAY;
+            case 9:
+                return Dxf.colors.GREY;
+    
+            default:
+                return Dxf.colors.WHITE;
+        }
     }
 
     _convertAndWritePrimitives(primitives, dxfFile, layerName) {
