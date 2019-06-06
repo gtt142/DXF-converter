@@ -64,7 +64,7 @@ export default class DxfConverter {
         if (section.neutralPolyline && Array.isArray(section.neutralPolyline.primitives)) {
             let layerName = `S${sectionNumber}_neutral_line`;
             let layerColor;
-            if (colors && colors.rollers) {
+            if (colors && colors.neutral) {
                 layerColor = this._getDxfColor(colors.neutral);
             } else {
                 layerColor = Dxf.colors.YELLOW;
@@ -82,7 +82,7 @@ export default class DxfConverter {
         if (section.profileSections && Array.isArray(section.profileSections.primitives)) {
             let layerName = `S${sectionNumber}_equidistants`;
             let layerColor;
-            if (colors && colors.rollers) {
+            if (colors && colors.profile) {
                 layerColor = this._getDxfColor(colors.profile);
             } else {
                 layerColor = Dxf.colors.RED;
@@ -122,7 +122,7 @@ export default class DxfConverter {
                     this._convertAndWritePrimitives(rollerGeometry, dxfFile, layerName);
                     
                     layerName = `S${sectionNumber}_roller_axis_${rNumber}`;
-                    if (colors && colors.rollers) {
+                    if (colors && colors.rollersAxis) {
                         layerColor = this._getDxfColor(colors.rollersAxis);
                     } else {
                         layerColor = Dxf.colors.GRAY;
