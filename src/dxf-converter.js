@@ -47,7 +47,8 @@ export default class DxfConverter {
     writeSectionsToDxf(sectionsData, dxfFile) {
         for(const [key, section] of sectionsData.sections.entries()) {
             try {
-                this.writeSectionToDxf(section, dxfFile, key+1, sectionsData.colors);
+                this.writeSectionToDxf(section, dxfFile, key+1,
+                    sectionsData.colors, sectionsData.lineTypes, sectionsData.layerNames);
             } catch (err) {
                 throw err;
             }
@@ -60,20 +61,32 @@ export default class DxfConverter {
      * @param {Dxf} dxfFile dxfFile to save 
      * @param {String} layerName name of layer where section will be placed
      */
-    writeSectionToDxf(section, dxfFile, sectionNumber, colors) {
+    writeSectionToDxf(section, dxfFile, sectionNumber, colors, lineTypes, layerNames) {
         if (section.neutralPolyline && Array.isArray(section.neutralPolyline.primitives)) {
             let layerName = `S${sectionNumber}_neutral_line`;
+            if (layerNames && layerNames.neutral) {
+                layerName = `S${sectionNumber}_${layerNames.neutral}`;
+            }
+
             let layerColor;
             if (colors && colors.neutral) {
                 layerColor = this._getDxfColor(colors.neutral);
             } else {
                 layerColor = Dxf.colors.YELLOW;
             }
+
+            let lineType;
+            if (lineTypes && lineTypes.neutral) {
+                lineType = this._getDxfLineTypes(lineTypes.neutral);
+            } else {
+                lineType = Dxf.lineTypes.LONG_DASHED_DOTTED;
+            }
+
             dxfFile.addLayer(
                 {
                     layerName,
                     layerColor,
-                    lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
+                    lineType,
                 }
             );
             this._convertAndWritePrimitives(section.neutralPolyline.primitives, dxfFile, layerName);
@@ -81,16 +94,29 @@ export default class DxfConverter {
 
         if (section.profileSections && Array.isArray(section.profileSections.primitives)) {
             let layerName = `S${sectionNumber}_equidistants`;
+            if (layerNames && layerNames.profile) {
+                layerName = `S${sectionNumber}_${layerNames.profile}`;
+            }
+
             let layerColor;
             if (colors && colors.profile) {
                 layerColor = this._getDxfColor(colors.profile);
             } else {
                 layerColor = Dxf.colors.RED;
             }
+
+            let lineType;
+            if (lineTypes && lineTypes.profile) {
+                lineType = this._getDxfLineTypes(lineTypes.profile);
+            } else {
+                lineType = Dxf.lineTypes.CONTINUOUS;
+            }
+
             dxfFile.addLayer(
                 {
                     layerName,
                     layerColor,
+                    lineType,
                 }
             );
             this._convertAndWritePrimitives(section.profileSections.primitives, dxfFile, layerName);
@@ -107,31 +133,55 @@ export default class DxfConverter {
                     }
 
                     let layerName = `S${sectionNumber}_roller_${rNumber}`;
+                    if (layerNames && layerNames.roller) {
+                        layerName = `S${sectionNumber}_${layerNames.roller}_${rNumber}`;
+                    }
+
                     let layerColor;
-                    if (colors && colors.rollers) {
-                        layerColor = this._getDxfColor(colors.rollers);
+                    if (colors && colors.roller) {
+                        layerColor = this._getDxfColor(colors.roller);
                     } else {
                         layerColor = Dxf.colors.BLUE;
                     }
+                    
+                    let lineType;
+                    if (lineTypes && lineTypes.roller) {
+                        lineType = this._getDxfLineTypes(lineTypes.roller);
+                    } else {
+                        lineType = Dxf.lineTypes.CONTINUOUS;
+                    }
+
                     dxfFile.addLayer(
                         {
                             layerName,
                             layerColor,
+                            lineType,
                         }
                     );
                     this._convertAndWritePrimitives(rollerGeometry, dxfFile, layerName);
                     
                     layerName = `S${sectionNumber}_roller_axis_${rNumber}`;
-                    if (colors && colors.rollersAxis) {
-                        layerColor = this._getDxfColor(colors.rollersAxis);
+                    if (layerNames && layerNames.rollerAxis) {
+                        layerName = `S${sectionNumber}_${layerNames.rollerAxis}_${rNumber}`;
+                    }
+                    
+                    if (colors && colors.rollerAxis) {
+                        layerColor = this._getDxfColor(colors.rollerAxis);
                     } else {
                         layerColor = Dxf.colors.GRAY;
                     }
+                    
+                    if (lineTypes && lineTypes.rollerAxis) {
+                        lineType = this._getDxfLineTypes(lineTypes.rollerAxis);
+                    } else {
+                        lineType = Dxf.lineTypes.LONG_DASHED_DOTTED;
+                    }
+
                     dxfFile.addLayer(
                         {
                             layerName,
                             layerColor,
-                            lineType: Dxf.lineTypes.LONG_DASHED_DOTTED
+                            lineType,
                         }
                     );
                     this._convertAndWritePrimitives(axis, dxfFile, layerName);
@@ -164,6 +214,15 @@ export default class DxfConverter {
     
             default:
                 return Dxf.colors.WHITE;
+        }
+    }
+
+    _getDxfLineTypes(type) {
+        switch (type) {
+            case 1:
+                return Dxf.lineTypes.CONTINUOUS;
+            case 2:
+                return Dxf.lineTypes.LONG_DASHED_DOTTED;
         }
     }
 

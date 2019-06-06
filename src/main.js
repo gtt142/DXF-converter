@@ -476,11 +476,23 @@ function saveAllLayers() {
             }
         ],
         // colors: {
-        //     rollers: 2,
-        //     rollersAxis: 3,
+        //     roller: 2,
+        //     rollerAxis: 3,
         //     neutral: 9,
         //     profile: 6,
-        // }
+        // },
+        // lineTypes: {
+        //     roller: 2,
+        //     rollerAxis: 1,
+        //     neutral: 1,
+        //     profile: 2,
+        // },
+        // layerNames: {
+        //     roller: 'ROLL',
+        //     rollerAxis: 'AX',
+        //     neutral: 'N-N',
+        //     profile: 'PROFIRU',
+        // },
     };
 
     // // const sections = [section1, section3, section2, section4];
