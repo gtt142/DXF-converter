@@ -34,6 +34,17 @@
                 
                 <div class='toggle-target display-none'>
                   
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#dxfconverterwriteprimitivestodxf'
+                        class='regular pre-open'>
+                        .writePrimitivesToDxf
+                      </a></li>
+                    
+                    </ul>
+                  
                   
                     <ul class='list-reset py1-ul pl1'>
                       <li class='h5'><span>Instance members</span></li>
@@ -72,12 +83,6 @@
                         href='#dxfconverterconvertlartoprimitives'
                         class='regular pre-open'>
                         #convertLARtoPrimitives
-                      </a></li>
-                      
-                      <li><a
-                        href='#dxfconverterwriteprimitivestodxf'
-                        class='regular pre-open'>
-                        #writePrimitivesToDxf
                       </a></li>
                       
                     </ul>
@@ -284,7 +289,7 @@
   </div>
   
 
-  <p>DxfCoverter class</p>
+  <p>DxfConverter class</p>
 
     <div class='pre p1 fill-light mt0'>new DxfConverter()</div>
   
@@ -306,6 +311,89 @@
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='dxfconverterwriteprimitivestodxf'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>writePrimitivesToDxf(primitives, dxfFile, layerName)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Write array of primitives to dfx file</p>
+
+    <div class='pre p1 fill-light mt0'>writePrimitivesToDxf(primitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>, dxfFile: <a href="#dxf">Dxf</a>, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>primitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
+	    dxf file object to write
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layerName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -483,7 +571,7 @@ where
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>writeSectionsToDxf(sectionsData, dxfFile, sections)</span>
+            <span class='code strong strong truncate'>writeSectionsToDxf(sectionsData, dxfFile)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -493,7 +581,7 @@ where
 
   <p>Write sections to dxfFile</p>
 
-    <div class='pre p1 fill-light mt0'>writeSectionsToDxf(sectionsData: any, dxfFile: <a href="#dxf">Dxf</a>, sections: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</div>
+    <div class='pre p1 fill-light mt0'>writeSectionsToDxf(sectionsData: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, dxfFile: <a href="#dxf">Dxf</a>)</div>
   
   
 
@@ -510,8 +598,9 @@ where
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>sectionsData</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>sectionsData</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    object with array of sections and additional data
+
           </div>
           
         </div>
@@ -520,15 +609,6 @@ where
           <div>
             <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
 	    dxfFile to save
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>sections</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code>
-	    array of sections
 
           </div>
           
@@ -561,7 +641,7 @@ where
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>writeSectionToDxf(section, dxfFile, sectionNumber, layerName)</span>
+            <span class='code strong strong truncate'>writeSectionToDxf(section, dxfFile, sectionNumber, colors, lineTypes, layerNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -571,7 +651,7 @@ where
 
   <p>Write section to dxfFile</p>
 
-    <div class='pre p1 fill-light mt0'>writeSectionToDxf(section: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, dxfFile: <a href="#dxf">Dxf</a>, sectionNumber: any, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+    <div class='pre p1 fill-light mt0'>writeSectionToDxf(section: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, dxfFile: <a href="#dxf">Dxf</a>, sectionNumber: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>, colors: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null), lineTypes: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null), layerNames: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null))</div>
   
   
 
@@ -606,16 +686,35 @@ where
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>sectionNumber</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>sectionNumber</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    number of section (order)
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>layerName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    name of layer where section will be placed
+            <span class='code bold'>colors</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null))</code>
+	    object with colors from front
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lineTypes</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null))</code>
+	    object with line types from front
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layerNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | null))</code>
+	    object with names for layer from front
 
           </div>
           
@@ -648,7 +747,7 @@ where
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>convertCommonPrimitivesToPrimitives(primitivesCommon, section)</span>
+            <span class='code strong strong truncate'>convertCommonPrimitivesToPrimitives(primitivesCommon)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -658,7 +757,7 @@ where
 
   <p>Convert section.primitives to array of <code>Primitives</code></p>
 
-    <div class='pre p1 fill-light mt0'>convertCommonPrimitivesToPrimitives(primitivesCommon: any, section: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></div>
+    <div class='pre p1 fill-light mt0'>convertCommonPrimitivesToPrimitives(primitivesCommon: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>></div>
   
   
 
@@ -676,15 +775,8 @@ where
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>primitivesCommon</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>section</span> <code class='quiet'>(any)</code>
-	    
+	    primitives from front
+
           </div>
           
         </div>
@@ -786,83 +878,6 @@ where
 </li>
       
     </ul>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='dxfconverterwriteprimitivestodxf'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>writePrimitivesToDxf(primitives, dxfFile, layerName)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Write array of primitives to dfx file</p>
-
-    <div class='pre p1 fill-light mt0'>writePrimitivesToDxf(primitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>, dxfFile: <a href="#dxf">Dxf</a>, layerName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>primitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#primitive">Primitive</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>dxfFile</span> <code class='quiet'>(<a href="#dxf">Dxf</a>)</code>
-	    dxf file object to write
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>layerName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
   
 
   
