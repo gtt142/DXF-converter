@@ -24,7 +24,7 @@
     "documentation": "^9.3.1",
     "eslint": "^5.16.0",
     "jsdoc": "^3.5.5",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   }
 }
